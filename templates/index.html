@@ -8,7 +8,8 @@
 <body>
     <p>You can shorten URLs here.</p>
     <form action="/" method="post">
-        <input name="linkentry" type="text">
+        <input name="linkentry" type="text" placeholder="Link to shorten">
+        <input name="custom" type="text" placeholder="Custom link (optional)">
         <button type="submit">Submit</button>
         <br>
         {{ newlink }}

@@ -7,10 +7,18 @@ app = Flask(__name__)
 def index():
     if request.method == "POST":
         url = request.form["linkentry"]
-        nurl = urlshort.shorten(url)
+        customurl = request.form["custom"]
+        if customurl == "":
+            nurl = urlshort.shorten(url)
+        else:
+            nurl = urlshort.customlink(customurl, url)
         if nurl == "long":
             return render_template("index.html", newlink="Link provided was too long.")
-        return render_template("index.html", newlink=f"http://localhost:8496/{nurl}")
+        if nurl == "taken":
+            return render_template("index.html", newlink="The custom link was already taken.")
+        if nurl == "illegal":
+            return render_template("index.html", newlink="The custom link contains illegal characters (alphanumeric characters only).")
+        return render_template("index.html", newlink=nurl)
     return render_template("index.html", newlink="")
 
 @app.route("/<id>")

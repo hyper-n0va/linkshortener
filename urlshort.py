@@ -35,6 +35,12 @@ def checklink(link):
             return row[0]
     return False
 
+#Checks to see if there are illegal characters in the custom link (alphanumeric characters only)
+def checkcustom(link):
+    for ch in str(link):
+        if ch not in (string.ascii_letters + "0123456789"):
+            return False
+
 #Creates the database with the URL table
 def createdb():
     db = sqlite3.connect("urls.db")
@@ -67,5 +73,20 @@ def shorten(sl):
     db.commit()
     return shortened
 
+#This is for creating custom links
+def customlink(cid, sl):
+    if checkcustom(cid) == False:
+        return "illegal"
+    if checklength(cid):
+        return "long"
+    if checkid(cid) != False:
+        return "taken"
     
+    db = sqlite3.connect("urls.db")
+    cur = db.cursor()
+
+    cur.execute(f"insert into urls (id, url) values('{cid}', '{sl}')")
+    db.commit()
+
+    return cid
     
